@@ -20,8 +20,36 @@ export class UsersService {
     // So this decorator is required simply because we have to use a generic type right here.
 
     create(email: string, password: string){
-        const user = this.repo.create({email, password}); // 👈 makes a new instance of an entity, but does not persist it to DB.
+        const user = this.repo.create({email, password}); // 👈 makes a new instance of an entity, but does not persist it to DB. Hooks can be executed with create method
         return this.repo.save(user); // 👈 Adds or updates a record to the DB or persists the entity to the DB.
     }
     // Once again, to hook up our service to our controller, we will use dependency injection.
+
+    findOne(id: number){
+        return this.repo.findOneBy({id});
+    } 
+
+    find(email: string){
+        return this.repo.find({where: {email}});
+    }       
+
+    async update(id: number, attributes: Partial<User>){
+        // In TypeScript, Partial<T> is a utility type that constructs a type with all the properties of T set to optional. This means that Partial<User> will have all the properties of the User entity, but all of them will be optional.
+        const user = await this.repo.findOneBy({id});
+
+        if(!user){
+            throw new Error('User not found');
+        }
+
+        Object.assign(user, attributes); // Overwrites the user object with the attributes object.
+        return this.repo.save(user); // 👈 Updates the record in the DB. Hooks can be executed with save method
+    }
+
+    async remove(id: number){
+        const user = await this.repo.findOneBy({id});
+        if(!user){
+            throw new Error('User not found');
+        }
+        return this.repo.remove(user); // 👈 Removes the record from the DB. Hooks can be executed with remove method
+    }
 }
