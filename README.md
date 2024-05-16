@@ -50,3 +50,19 @@ $ npm run test:cov
 - #### Solution to serialization
   - Make custom interceptors.
   - And wire them up with the DTOs.
+
+    ```
+      class CustomerInterceptor{
+        intercept(context: ExecutionContext, next: CallHandler)
+      }
+    ```
+
+    `intercept` method is called automatically anytime our interceptor needs to run. So handle some incoming request or outgoing response. 
+    `context: ExecutionContext` : Information on the incoming request.
+    `next: CallHandler` : Kind of a reference to the request handler in our controller.
+
+
+## implements vs extends
+- `implements` is not the same as `extends`.
+- We make use of `extends` whenever we are subclassing an existing class.
+- We make use of `implements` anytime we want to create a new class that satisfies all the requirements of either an abstract class or an interface.
