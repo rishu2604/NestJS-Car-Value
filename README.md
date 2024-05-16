@@ -38,3 +38,15 @@ $ npm run test:cov
 1. Create an entity file and create a class in it that lists all the properties that your entity will have.
 2. Connect the entity to its parent module. This creates a repository.
 3. Connect the entity to the root connection (in app module).
+
+
+## Custom data serialization
+### NestJs recommendation
+- use `@Exclude()` from `class-transformer`
+- use `@UseInterceptors(ClassSerializerInterceptor)` from `'@nestjs/common'`
+- #### Downside to this approach
+  - Cannot customize the exclude directive i.e. sending data based on who is the user or from which route handler the incoming requests is coming from.
+
+- #### Solution to serialization
+  - Make custom interceptors.
+  - And wire them up with the DTOs.
